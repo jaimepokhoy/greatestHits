@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Collection</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="style/styles.css">
 
 </head>
 
@@ -20,7 +21,13 @@
 
       render() {
         return (
+          <div className="wrapper" id="wrapper">
+          <header>
           <Navigation items={this.props.items}/>
+          </header>
+          <section className="aboutus" id="aboutus"></section>
+
+          </div>
         )
       }
     }
@@ -98,6 +105,17 @@
         return (
           <li onClick={this.handleClick} className={this.props.active}><a href={this.props.address}>{this.props.desc}</a></li>
         )
+      }
+    }
+
+    class Jumbo extends React.Component {
+      render() {
+        return (
+        <div className="jumbotron">
+          <h1>Jaime Pokhoy</h1>
+          <p>Portfolio of what I can do... with React</p>
+        </div>
+      )
       }
     }
 

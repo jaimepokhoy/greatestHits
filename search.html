@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Collection</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+  <!-- <link rel="stylesheet" type="text/css" href="style/styles.css"> -->
 </head>
 
 <body>
@@ -71,7 +71,7 @@
             <div className="container-fluid">
               <div className="navbar-header">
 
-                <a className="navbar-brand" href="#">Search</a>
+                <a className="navbar-brand" href="./index.html">Tical</a>
               </div>
 
               <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -117,19 +117,52 @@
 
   <script type="text/babel">
     class Search extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.state = {
+          filter: ""
+        }
+
+        this.filterChange = this.filterChange.bind(this);
+      }
+
+      filterChange(newFilter) {
+        this.setState({
+          filter: newFilter
+        });
+      }
+
       render() {
         return (
           <div>
-          <List items={this.props.list}/>
+          <SearchBar filter={this.state.filter} handleChange={this.filterChange}/>
+          <List filter={this.state.filter} items={this.props.list}/>
           </div>
         )
       }
     }
 
-    // class SearchBar extends React.Component {
-    //   render() {
-    //   }
-    // }
+    class SearchBar extends React.Component {
+
+      constructor(props) {
+        super(props);
+
+        this.handleChange = this.handleChange.bind(this);
+      }
+
+      handleChange(e) {
+        this.props.handleChange(e.target.value);
+      }
+
+      render() {
+        return (
+          <div className="form-group">
+            <input type="text" value={this.props.filter} onChange={this.handleChange} className="form-control" id="search" placeholder="Search cars..." />
+          </div>
+        )
+      }
+    }
 
     class List extends React.Component {
 
@@ -137,13 +170,20 @@
         var items = [];
 
         for (var i = 0; i < this.props.items.length; i++) {
-          items.push(<ListItem make={this.props.items[i].make} model={this.props.items[i].model} />);
+          if ((this.props.items[i].model.indexOf(this.props.filter) !== -1) || (this.props.items[i].make.indexOf(this.props.filter) !== -1)) {
+            items.push(<ListItem key={this.props.items[i].model} make={this.props.items[i].make} model={this.props.items[i].model} />);
+          }
         }
 
         return (
-        <ul>
-        {items}
-        </ul>
+        <table className="table">
+          <thead>
+          <tr><th>MAKE</th><th>MODEL</th></tr>
+          </thead>
+          <tbody>
+          {items}
+          </tbody>
+        </table>
       )
       }
     }
@@ -151,7 +191,7 @@
     class ListItem extends React.Component {
       render() {
         return (
-          <li>{this.props.make}-{this.props.model}</li>
+          <tr><td>{this.props.make}</td><td>{this.props.model}</td></tr>
         )
       }
     }
