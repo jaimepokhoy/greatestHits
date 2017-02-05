@@ -4,13 +4,17 @@
   <meta charset="utf-8">
   <title>Collection</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="style/styles.css">
-
+  <!-- <link rel="stylesheet" type="text/css" href="style/styles.css"> -->
 </head>
 
 <body>
+<div>
   <div id="container">
   </div>
+  <div id="search">
+
+  </div>
+</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
   <script src="https://fb.me/react-with-addons-0.14.7.js"></script>
@@ -21,13 +25,7 @@
 
       render() {
         return (
-          <div className="wrapper" id="wrapper">
-          <header>
           <Navigation items={this.props.items}/>
-          </header>
-          <section className="aboutus" id="aboutus"></section>
-
-          </div>
         )
       }
     }
@@ -62,9 +60,9 @@
         this.props.items.forEach((item) => {
 
           if (this.state.active === item.desc) {
-            tabs.push(<Tab desc={item.desc} active={active} address={item.address} changeActive={this.newActive} key={item.key}/>)
+            tabs.push(<Tab desc={item.desc} active={active} changeActive={this.newActive} key={item.key}/>)
           } else {
-            tabs.push(<Tab desc={item.desc} address={item.address} changeActive={this.newActive} key={item.key}/>)
+            tabs.push(<Tab desc={item.desc} changeActive={this.newActive} key={item.key}/>)
           }
         });
 
@@ -73,7 +71,7 @@
             <div className="container-fluid">
               <div className="navbar-header">
 
-                <a className="navbar-brand" href="#">Tical</a>
+                <a className="navbar-brand" href="./index.html">Tical</a>
               </div>
 
               <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -101,31 +99,106 @@
       }
 
       render() {
-        console.log(this.props.address);
         return (
           <li onClick={this.handleClick} className={this.props.active}><a href={this.props.address}>{this.props.desc}</a></li>
         )
       }
     }
 
-    class Jumbo extends React.Component {
-      render() {
-        return (
-        <div className="jumbotron">
-          <h1>Jaime Pokhoy</h1>
-          <p>Portfolio of what I can do... with React</p>
-        </div>
-      )
-      }
-    }
-
     var tabs = [
-      {key: "search", desc: "Searcher", active: false, address: "./search.html"},
-      {key: "ticTacToe", desc: "Tic Tac Toe", active: false, address: "./search.html"},
-      {key: "shop", desc: "Shop", active: false, address: "./cart.html"},
+      {key: "search", desc: "Searcher", active: false, address: "/search.html"},
+      {key: "ticTacToe", desc: "Tic Tac Toe", active: false, address: "/search.html"},
+      {key: "shop", desc: "Shop", active: false, address: "/search.html"},
     ]
 
     ReactDOM.render(<Application items={tabs}/>, document.getElementById("container"));
+  </script>
+
+
+  <script type="text/babel">
+
+    class Cart extends React.Component {
+      render() {
+        return (
+          <div>
+            <Products items={this.props.list} />
+
+          </div>
+        )
+      }
+    }
+
+    class Products extends React.Component {
+
+
+      render() {
+        var rows = [];
+
+        for (var i = 0; i < this.props.items.length; i++) {
+          rows.push(<Product key={this.props.items[i].desc} desc={this.props.items[i].desc} price={this.props.items[i].price} />);
+        }
+
+        return (
+          <table className="table table-hover">
+            <tbody>
+              {rows}
+              <Total />
+            </tbody>
+
+          </table>
+        )
+      }
+    }
+
+    class Product extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.handleClick = this.handleClick.bind(this);
+      }
+
+      handleClick(e) {
+        // console.log(e.getSource());
+        console.log();
+      }
+
+      render() {
+        return (
+          <tr onClick={this.handleClick} className={this.props.active}>
+            <td>{this.props.desc}</td>
+            <td>{this.props.price}</td>
+          </tr>
+        )
+      }
+    }
+
+    class Total extends React.Component {
+      render() {
+        return (
+          <tr>
+          <th>TOTAL</th>
+          <th>$ 500</th>
+          </tr>
+        )
+      }
+    }
+
+    var products = [{
+      desc: "Vacuum",
+      price: 500,
+      active: ""
+    }, {
+      desc: "Blowdryer",
+      price: 20,
+      active: ""
+    }, {
+      desc: "Iron",
+      price: 50,
+      active: ""
+    }];
+
+    ReactDOM.render(<Cart list={products} />, document.getElementById("search"));
+
   </script>
 
 
