@@ -129,20 +129,34 @@
     }
 
     class Products extends React.Component {
+      constructor(props) {
+        super(props);
+
+        this.state = {
+          active: true,
+          total: 0
+        };
+
+        this.handleSwitch = this.handleSwitch.bind(this);
+      }
+
+      handleSwitch (price) {
+        this.setState({total: this.state.total + +price})
+      }
 
 
       render() {
         var rows = [];
 
         for (var i = 0; i < this.props.items.length; i++) {
-          rows.push(<Product key={this.props.items[i].desc} desc={this.props.items[i].desc} price={this.props.items[i].price} />);
+          rows.push(<Product key={this.props.items[i].desc} handleSwitch={this.handleSwitch} desc={this.props.items[i].desc} price={this.props.items[i].price} />);
         }
 
         return (
           <table className="table table-hover">
             <tbody>
               {rows}
-              <Total />
+              <Total total={this.state.total}/>
             </tbody>
 
           </table>
@@ -154,17 +168,28 @@
       constructor(props) {
         super(props);
 
+        this.state = {
+          active: false
+        };
+
         this.handleClick = this.handleClick.bind(this);
       }
 
-      handleClick(e) {
-        // console.log(e.getSource());
-        console.log();
+      handleClick() {
+
+        var active = this.state.active ? false : true;
+
+        this.props.handleSwitch(active ? this.props.price : -this.props.price);
+        this.setState({active: active});
+        console.log(this.state.active)
       }
 
       render() {
+        var type = this.state.active ? "success" : "";
+
+
         return (
-          <tr onClick={this.handleClick} className={this.props.active}>
+          <tr onClick={this.handleClick} className={type}>
             <td>{this.props.desc}</td>
             <td>{this.props.price}</td>
           </tr>
@@ -177,7 +202,7 @@
         return (
           <tr>
           <th>TOTAL</th>
-          <th>$ 500</th>
+          <th>$ {this.props.total}</th>
           </tr>
         )
       }
