@@ -60,7 +60,7 @@
         this.props.items.forEach((item) => {
 
           if (this.state.active === item.desc) {
-            tabs.push(<Tab desc={item.desc} active={active} changeActive={this.newActive} key={item.key}/>)
+            tabs.push(<Tab desc={item.desc} active={active} address={item.address} changeActive={this.newActive} key={item.key}/>)
           } else {
             tabs.push(<Tab desc={item.desc} changeActive={this.newActive} key={item.key}/>)
           }
@@ -106,9 +106,9 @@
     }
 
     var tabs = [
-      {key: "search", desc: "Searcher", active: false, address: "/search.html"},
-      {key: "ticTacToe", desc: "Tic Tac Toe", active: false, address: "/search.html"},
-      {key: "shop", desc: "Shop", active: false, address: "/cart.html"},
+      {key: "search", desc: "Searcher", active: false, address: "./search.html"},
+      {key: "ticTacToe", desc: "Tic Tac Toe", active: false, address: "./tic.html"},
+      {key: "shop", desc: "Shop", active: false, address: "./cart.html"},
     ]
 
     ReactDOM.render(<Application items={tabs}/>, document.getElementById("container"));
