@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Counter</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js"></script>
+</head>
+
+<body>
+
+  <div id="container">
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+  <script src="https://fb.me/react-with-addons-0.14.7.js"></script>
+  <script src="https://fb.me/react-dom-0.14.7.min.js"></script>
+  <script type="text/babel">
+
+  class Application extends React.Component {
+    render() {
+      return(
+        <div>
+        <Input />
+        <List items={this.props.items}/>
+        </div>
+      )
+    }
+  }
+
+  let nextTodoId = 0;
+  class Input extends React.Component {
+    render() {
+      return (
+        <div>
+        <input id="todoText" type="text" className="form-control" ref={node => {
+          this.input = node;
+        }}></input>
+        <input className="btn btn-default" type="button" value="Add" onClick={() => {
+          store.dispatch({
+            type: 'ADDTO',
+            text: this.input.value,
+            id: nextTodoId++
+          })
+          this.input.value = "";
+
+        }}></input>
+        </div>
+      )
+    }
+  }
+
+  class List extends React.Component {
+    render() {
+      return (
+        <ul className="list-group">
+        {this.props.items.map(todo => {
+          return (
+            <li className={todo.style} key={todo.id} onClick={() => {
+              store.dispatch({
+                type: 'TOGGLE',
+                id: todo.id
+              })
+            }}>
+            {todo.text}
+            </li>
+          )
+        })}
+        </ul>
+      )
+    }
+  }
+
+  const defaultState = {
+    todos: [],
+    filter: 'ALL'
+  }
+  const counter = (state = defaultState, action) => {
+    switch (action.type) {
+      case 'ADDTO':
+        return Object.assign({}, {
+          todos: state.todos.concat([{
+            text: action.text,
+            completed: false,
+            id: action.id,
+            style: "list-group-item"
+          }])
+        });
+      case 'TOGGLE':
+        var newtodos = [];
+        var temp = {};
+        for (var i = 0; i < state.todos.length; i++) {
+          temp = state.todos[i];
+          if (state.todos[i].id === action.id) {
+            // temp.completed = state.todos[i].completed ? false : true;
+            if (!temp.completed) {
+              temp.style += " list-group-item-success";
+              temp.completed = true;
+            } else {
+              temp.completed = false;
+              temp.style = "list-group-item";
+            }
+          }
+          newtodos.push(temp);
+
+        }
+        console.log(newtodos);
+        return Object.assign({}, {
+          todos: newtodos
+        });
+      default:
+        return state;
+    }
+  }
+
+  const { createStore } = Redux;
+  const { Component } = React;
+  const store = createStore(counter);
+
+  const render = () => {
+    ReactDOM.render(<Application items={store.getState().todos}/>, document.getElementById("container"));
+  };
+
+  store.subscribe(render);
+  render();
+
+  document.addEventListener('click', () => {
+    store.dispatch({ type: 'INCREMENT'});
+  });
+
+  </script>
+
+</body>
+</html>
